@@ -7,11 +7,12 @@ web:
     - postgres:postgres
     - redis:redis
   volumes:
-    - /usr/src/app
-    - /usr/src/app/static
+    - /home/zw/dockerizing-django/web:/usr/src/app
+    - /home/zw/dockerizing-django/log:/log
   env_file: .env
   environment:
     DEBUG: 'true'
+
   command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
 
 nginx:
@@ -21,8 +22,11 @@ nginx:
     - "80:80"
   volumes:
     - /www/static
-  volumes_from:
-    - web
+    - /home/zw/dockerizing-django/web/static:/static
+    - /home/zw/dockerizing-django/log:/log
+
+  # volumes_from:
+  #   - web
   links:
     - web:web
 
