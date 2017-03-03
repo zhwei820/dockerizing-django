@@ -1,10 +1,23 @@
 #!/bin/sh
 
 	if [ -e $(dirname "$0")/nsenter ]; then
+
+
+
 		# with boot2docker, nsenter is not in the PATH but it is in the same folder
 		NSENTER=$(dirname "$0")/nsenter
 	else
-		NSENTER=nsenter
+
+
+		curl https://www.kernel.org/pub/linux/utils/util-linux/v2.24/util-linux-2.24.tar.gz | tar -zxf-
+		cd util-linux-2.24
+		./configure --without-ncurses
+		make nsenter
+		sudo cp nsenter $(dirname "$0")
+		cd .. && rm -rf util-linux-2.24
+
+		NSENTER=$(dirname "$0")/nsenter
+
 	fi
 
 	if [ -z "$1" ]; then
