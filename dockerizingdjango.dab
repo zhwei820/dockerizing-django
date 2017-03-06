@@ -1,0 +1,70 @@
+{
+  "Services": {
+    "nginx": {
+      "Image": "127.0.0.1:5000/nginx@sha256:1a69aa15196f31fd9c1c62b1c71f486f3bbbeb1cbd79e7af65416a8c814a5c5c", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 80, 
+          "Protocol": "tcp"
+        }
+      ]
+    }, 
+    "postgres": {
+      "Image": "postgres@sha256:f85aedeaf99a4dc543906a84b32bc48e79563373dd5373cb0771ce3625ce9d60", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 5432, 
+          "Protocol": "tcp"
+        }
+      ]
+    }, 
+    "redis": {
+      "Image": "redis@sha256:e4a69910ba49d7c211135df2b8220ee94c634f4789c9b3c7ed391a36bbdbddbf", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 6379, 
+          "Protocol": "tcp"
+        }
+      ]
+    }, 
+    "web": {
+      "Args": [
+        "/usr/local/bin/gunicorn", 
+        "docker_django.wsgi:application", 
+        "-w", 
+        "2", 
+        "-b", 
+        ":8000"
+      ], 
+      "Env": [
+        "DB_NAME=postgres", 
+        "DB_PORT=5432", 
+        "DB_PASS=postgres", 
+        "DB_USER=postgres", 
+        "DEBUG=true", 
+        "SECRET_KEY=superappsdk_all_scorewall.jar", 
+        "DB_SERVICE=postgres"
+      ], 
+      "Image": "127.0.0.1:5000/web@sha256:46a1fd99e11a8594131a43112c6b013499149be9c5bb53a31da0768a6402fcfb", 
+      "Networks": [
+        "default"
+      ], 
+      "Ports": [
+        {
+          "Port": 8000, 
+          "Protocol": "tcp"
+        }
+      ]
+    }
+  }, 
+  "Version": "0.1"
+}

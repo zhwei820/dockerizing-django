@@ -5,5 +5,9 @@ WORKDIR /code
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt
 
-WORKDIR /usr/src/app
-# ADD . /code/
+# RUN mkdir /usr/src/app
+
+# WORKDIR /usr/src/app
+RUN mkdir /log
+
+ADD . /code/

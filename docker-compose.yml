@@ -5,48 +5,76 @@ services:
     restart: always
     build: ./web
     image: 127.0.0.1:5000/web
-    expose:
-      - "8000"
-    links:
-      - postgres:postgres
-      - redis:redis
+    # expose:
+    #   - "8000"
+    ports: 
+      - "8000:8000"
+
+    # links:
+    #   - postgres:postgres
+    #   - redis:redis
+
+    networks:
+        - frontend
+        - backend
+
     volumes:
-      - /home/zw/dockerizing-django/web:/usr/src/app
-      - /home/zw/dockerizing-django/log:/log
+      - /var/log:/log
+      # - /home/zw/dockerizing-django/web:/usr/src/app
     env_file: .env
+    # replicas: 2
     environment:
       DEBUG: 'true'
 
     command: /usr/local/bin/gunicorn docker_django.wsgi:application -w 2 -b :8000
 
-  nginx:
-    restart: always
-    build: ./nginx/
-    image: 127.0.0.1:5000/nginx
-    ports:
-      - "80:80"
-    volumes:
-      - /www/static
-      - /home/zw/dockerizing-django/web/static:/static
-      - /home/zw/dockerizing-django/log:/log
+  # nginx:
+  #   restart: always
+  #   build: ./nginx/
+  #   image: 127.0.0.1:5000/nginx
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - /www/static
+  #     - /home/zw/dockerizing-django/web/static:/static
+  #     - /home/zw/dockerizing-django/log:/log
 
-    # volumes_from:
-    #   - web
-    links:
-      - web:web
+  #   # volumes_from:
+  #   #   - web
+  #   links:
+  #     - web:web
+
+# docker pull hub.c.163.com/public/redis:2.8.4
 
   postgres:
     restart: always
-    image: postgres:latest
+    image: hub.c.163.com/library/postgres:latest    
     ports:
       - "5432:5432"
     volumes:
-      - /pgdata:/var/lib/postgresql/data/
+      - pgdata:/var/lib/postgresql/data/
+
+    networks:
+        - backend
+
+# docker pull hub.c.163.com/library/postgres:latest
 
   redis:
     restart: always
-    image: redis:latest
+    image: hub.c.163.com/library/redis:latest
     ports:
       - "6379:6379"
     volumes:
-      - /redisdata:/data
+      - redisdata:/data
+    networks:
+        - backend
+
+
+networks:
+    frontend:
+    backend:
+
+
+volumes:
+    pgdata:
+    redisdata:
