@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     restart: always
-    build: ./web
+    build: ./nginx/web
     image: 127.0.0.1:5000/web
     # expose:
     #   - "8000"
@@ -76,4 +76,3 @@ networks:
 volumes:
     pgdata:
     redisdata:
-    web:

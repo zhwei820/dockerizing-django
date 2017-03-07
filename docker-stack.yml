@@ -3,7 +3,7 @@ version: '3'
 services:
   web:
     restart: always
-    # build: ./web
+    build: ./nginx/web
     image: 127.0.0.1:5000/web
     expose:
       - "8000"
@@ -21,7 +21,7 @@ services:
 
   nginx:
     restart: always
-    # build: ./nginx/
+    build: ./nginx/
     image: 127.0.0.1:5000/nginx
     ports:
       - "80:80"
@@ -30,8 +30,6 @@ services:
       - /home/zw/dockerizing-django/web/static:/static
       - /home/zw/dockerizing-django/log:/log
 
-    # volumes_from:
-    #   - web
     links:
       - web:web
 

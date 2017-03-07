@@ -3,13 +3,13 @@
 server {
 
     listen 80;
-    server_name example.org;
+    server_name localhost;
     charset utf-8;
-    error_log /log/nginx/error.log;
-    access_log /log/nginx/access.log;
+    error_log /log/nginx/d_error.log;
+    access_log /log/nginx/d_access.log;
 
     location /static {
-        alias /code/static;
+        alias /www/static;
     }
 
     location / {
